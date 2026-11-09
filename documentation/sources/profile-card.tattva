@@ -1,0 +1,32 @@
+app {
+  title: "Profile Card"
+}
+
+script "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+
+element ProfileCard(name, role, location, initials) {
+  view {
+    article(class: "overflow-hidden rounded-3xl bg-white shadow-xl") {
+      div(class: "h-28 bg-gradient-to-r from-lime-500 via-green-600 to-emerald-700")
+      div(class: "px-7 pb-7") {
+        div(class: "-mt-12 grid h-24 w-24 place-items-center rounded-3xl border-4 border-white bg-slate-900 text-2xl font-semibold text-white shadow-lg") "{initials}"
+        h2(class: "mt-5 text-2xl font-semibold text-slate-900") "{name}"
+        p(class: "mt-1 font-semibold text-green-700") "{role}"
+        p(class: "mt-4 flex items-center gap-2 text-sm text-slate-500") "⌖ {location}"
+        p(class: "mt-5 leading-7 text-slate-600") "I like making useful things, learning in public, and turning one small idea into a working interface."
+        div(class: "mt-6 flex gap-3") {
+          a(href: "#work", class: "flex-1 rounded-xl bg-green-700 px-4 py-3 text-center text-sm font-medium text-white hover:bg-green-800") "View work"
+          a(href: "mailto:hello@example.com", class: "rounded-xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50") "Email"
+        }
+      }
+    }
+  }
+}
+
+page "/" {
+  main(class: "grid min-h-screen place-items-center bg-gradient-to-br from-green-50 to-lime-100 p-6") {
+    div(class: "w-full max-w-sm") {
+      ProfileCard(name: "Mira Patel", role: "Product designer", location: "Bengaluru, India", initials: "MP")
+    }
+  }
+}

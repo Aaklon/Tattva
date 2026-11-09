@@ -1,0 +1,22 @@
+app {
+  title: "Hero Section"
+}
+
+script "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+
+page "/" {
+  main(class: "min-h-screen bg-stone-950 p-4 text-white sm:p-8") {
+    section(class: "relative mx-auto flex min-h-[680px] max-w-7xl items-end overflow-hidden rounded-[2rem] bg-stone-800 p-8 sm:p-14") {
+      img(src: "../../hero.jpg", class: "absolute inset-0 h-full w-full object-cover opacity-60", alt: "Tattva hero background")
+      div(class: "absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent")
+      div(class: "relative z-10 max-w-3xl") {
+        h1(class: "mt-7 text-5xl font-semibold leading-[0.98] tracking-tight sm:text-7xl") "Make room for your next big idea."
+        p(class: "mt-6 max-w-2xl text-lg leading-8 text-stone-200") "A hero section pairs one clear promise with a strong image and a single next step."
+        div(class: "mt-9 flex flex-wrap gap-3") {
+          a(href: "#start", class: "rounded-xl bg-lime-300 px-6 py-4 font-semibold text-stone-950 transition hover:bg-lime-200") "Get started"
+          a(href: "#learn", class: "rounded-xl border border-white/40 px-6 py-4 font-medium text-white backdrop-blur transition hover:bg-white/10") "See how it works"
+        }
+      }
+    }
+  }
+}

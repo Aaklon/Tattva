@@ -1,0 +1,34 @@
+global menuOpen = false
+
+fn toggleMenu() {
+  menuOpen = not menuOpen
+}
+
+page "/examples/navbar" {
+  div(class: "min-h-screen bg-slate-100 p-4 sm:p-10") {
+    nav(class: "mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 rounded-2xl bg-white px-6 py-4 shadow-lg") {
+      a(href: "#home", class: "flex items-center gap-3 text-xl font-semibold tracking-tight text-slate-900") {
+        span(class: "grid h-10 w-10 place-items-center rounded-xl bg-green-700 text-xl text-white") "त"
+        span "तत्त्व:"
+      }
+      div(class: "hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex") {
+        a(href: "#work") "Work"
+        a(href: "#about") "About"
+        a(href: "#contact") "Contact"
+      }
+      a(href: "#contact", class: "rounded-xl bg-green-700 px-5 py-3 text-sm font-medium text-white navbar-cta shadow-md transition hover:bg-green-800") "Let's talk"
+      button(class: "rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 md:hidden", onclick: toggleMenu) "Menu"
+      if menuOpen {
+        div(class: "flex w-full flex-col gap-3 border-t border-slate-100 pt-4 text-sm font-semibold text-slate-600 md:hidden") {
+          a(href: "#work") "Work"
+          a(href: "#about") "About"
+          a(href: "#contact") "Contact"
+        }
+      }
+    }
+    section(class: "example-source-panel") {
+      h2 "Tattva source"
+      pre { code(id: "source-navbar") "Loading source..." }
+    }
+  }
+}

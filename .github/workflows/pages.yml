@@ -1,0 +1,48 @@
+name: Deploy documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
+      - name: Build Tattva compiler
+        run: g++ -std=c++17 compiler/parser.cpp -o /tmp/tattva-parser
+      - name: Compile documentation site
+        run: |
+          /tmp/tattva-parser documentation documentation/dist
+          mkdir -p documentation/dist/sources documentation/dist/previews documentation/dist/assets
+          cp documentation/sources/*.tattva documentation/dist/sources/
+          cp documentation/hero.jpg documentation/dist/hero.jpg
+          cp documentation/assets/tattva.png documentation/dist/assets/tattva.png
+          cp documentation/previews/*.png documentation/dist/previews/
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: documentation/dist
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

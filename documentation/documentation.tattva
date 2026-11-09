@@ -1,0 +1,616 @@
+app {
+  title: "तत्त्व: Documentation"
+  lang: "en"
+  router: "hash"
+}
+
+script "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+
+global docQuery = ""
+
+fn searchDocs() {
+  if docQuery != "" {
+    window.find(docQuery)
+  }
+}
+
+layout {
+  header(class: "docs-header") {
+    a(href: "/", class: "docs-brand") {
+      img(src: "assets/tattva.png", alt: "तत्त्व: logo")
+      span "तत्त्व:"
+    }
+    div(class: "docs-nav-actions") {
+      details(class: "docs-example-menu") {
+        summary(class: "docs-example-trigger") "Examples"
+        div(class: "docs-example-links") {
+          a(href: "/") "Language guide"
+          a(href: "/examples/navbar") "Navbar"
+          a(href: "/examples/form") "Form"
+          a(href: "/examples/search-bar") "Search bar"
+          a(href: "/examples/hero-section") "Hero section"
+          a(href: "/examples/blog-votes") "Blog with votes"
+          a(href: "/examples/todo-list") "Todo list"
+          a(href: "/examples/profile-card") "Profile card"
+          a(href: "/examples/pricing-cards") "Pricing cards"
+          a(href: "/examples/dashboard") "Dashboard"
+          a(href: "/examples/faq") "FAQ accordion"
+        }
+      }
+      div(class: "docs-search") {
+        span(class: "docs-search-icon") "⌕"
+        input(type: "search", bind: docQuery, placeholder: "Search documentation")
+        button(onclick: searchDocs) "Search"
+      }
+    }
+  }
+  div(class: "docs-frame") {
+    main(class: "docs-main") {
+      slot
+    }
+  }
+}
+
+page "/" {
+  doctitle "तत्त्व: Language Guide"
+
+  div(id: "top", class: "book-shell") {
+    header(class: "topbar") {
+      a(href: "#top", class: "brand") {
+        img(src: "assets/tattva.png", alt: "Tattva logo", class: "brand-logo")
+        span "तत्त्व:"
+      }
+    }
+
+    main(class: "book-grid") {
+      article(class: "book-content") {
+        section(id: "start", class: "cover") {
+          img(src: "assets/tattva.png", alt: "Tattva logo", class: "cover-logo")
+          h1 "तत्त्व: Language Guide"
+          p(class: "lead") "Learn Tattva from the beginning. Start with values and variables, then use them to build web pages and interactive features."
+          h2 "What is Tattva?"
+          p "Tattva is a programming language for building web pages. You describe data, behavior, and page elements in Tattva. The compiler turns your source files into HTML, CSS, and JavaScript for a browser."
+        }
+
+        section(id: "contents", class: "contents-page") {
+          h2 "Contents"
+          ul(class: "contents-list") {
+            li { a(href: "#setup") "Set up Tattva" }
+            li { a(href: "#variables") "Variables and constants" }
+            li { a(href: "#types") "Values and data types" }
+            li { a(href: "#expressions") "Expressions and operators" }
+            li { a(href: "#conditions") "Conditions" }
+            li { a(href: "#loops") "Loops" }
+            li { a(href: "#collections") "Lists and maps" }
+            li { a(href: "#functions") "Functions and lambdas" }
+            li { a(href: "#pages") "Pages and views" }
+            li { a(href: "#elements") "Reusable elements" }
+            li { a(href: "#state") "State and reactivity" }
+            li { a(href: "#events") "Events and forms" }
+            li { a(href: "#routes") "Routes and navigation" }
+            li { a(href: "#models") "Models and records" }
+            li { a(href: "#styles") "CSS and JavaScript" }
+            li { a(href: "#debugging") "Debugging" }
+          }
+        }
+
+        section(id: "setup", class: "chapter") {
+          h2 "Set up Tattva"
+          p "Build the compiler from the repository root with a C++17 compiler and make."
+          pre { code "make build\n" }
+          p "Create a folder named hello and save this program as hello/hello.tattva. A source file may use the .tattva, .ttv, or .web extension."
+          pre {
+            code "app {\n"
+            code "  title: \"Hello Tattva\"\n"
+            code "}\n"
+            code "page \"/\" {\n"
+            code "  h1 \"Hello, web!\"\n"
+            code "}\n"
+          }
+          p "Compile the source folder into an output folder."
+          pre { code "./parser hello hello/dist\n" }
+          p "Open hello/dist/index.html in a browser. The output folder also contains style.css and app.js. The compiler reads source files directly inside the input folder. It does not search subfolders."
+          p "Unless an example shows a top-level declaration, its statements go inside a function or page."
+        }
+
+        section(id: "variables", class: "chapter") {
+          h2 "Variables and constants"
+          p "A variable gives a name to a value. Use a clear name, then assign a value with the equals sign."
+          pre {
+            code "name = \"Mira\"\n"
+            code "score = 12\n"
+            code "hasAccount = true\n"
+            code "score = score + 1\n"
+          }
+          p "Use let for a local variable inside a function or block. Use const for a value that you do not reassign."
+          pre {
+            code "fn showScore() {\n"
+            code "  let nextScore = score + 1\n"
+            code "  const label = \"Next score\"\n"
+            code "  print(label, nextScore)\n"
+            code "}\n"
+          }
+          p "Use global for a value shared across the application. Add persist when a global should be stored in the browser. Use derived for a value calculated from other values."
+          p "Use plain assignment inside a function or page to create a local value. At the top level of a file, declare shared values with global."
+          pre {
+            code "global clicks = 0\n"
+            code "global persist theme = \"light\"\n"
+            code "derived doubleClicks = clicks * 2\n"
+          }
+        }
+
+        section(id: "types", class: "chapter") {
+          h2 "Values and data types"
+          p "A data type describes what kind of value a name holds. Tattva supports numbers, strings, booleans, none, lists, maps, functions, and model records."
+          div(class: "type-table") {
+            div(class: "type-row type-head") {
+              strong "Type"
+              strong "Example"
+              strong "Use"
+            }
+            div(class: "type-row") {
+              strong "Number"
+              code "42, 3.5"
+              span "Counts and measurements"
+            }
+            div(class: "type-row") {
+              strong "String"
+              code "\"hello\""
+              span "Names and messages"
+            }
+            div(class: "type-row") {
+              strong "Boolean"
+              code "true, false"
+              span "Yes or no values"
+            }
+            div(class: "type-row") {
+              strong "None"
+              code "none"
+              span "An absent value"
+            }
+            div(class: "type-row") {
+              strong "List"
+              code "[2, 4, 6]"
+              span "An ordered group"
+            }
+            div(class: "type-row") {
+              strong "Map"
+              code "{ name: \"Mira\" }"
+              span "Named values"
+            }
+          }
+          h3 "Numbers and strings"
+          p "Numbers can be whole or decimal. Put strings inside quotation marks. A backslash lets you include a quotation mark inside a string."
+          pre {
+            code "age = 21\n"
+            code "price = 19.95\n"
+            code "message = \"She said \\\"hi\\\"\"\n"
+          }
+          h3 "Booleans and none"
+          p "A boolean is true or false. none represents no value. Compare with none before using a value that may be absent."
+          pre {
+            code "isReady = true\n"
+            code "selectedItem = none\n"
+            code "if selectedItem == none {\n"
+            code "  print(\"Choose an item first\")\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "expressions", class: "chapter") {
+          h2 "Expressions and operators"
+          p "An expression combines values and produces a result. You can assign that result, pass it to a function, or show it in a page."
+          h3 "Arithmetic"
+          pre {
+            code "total = price * quantity\n"
+            code "remaining = total - paid\n"
+            code "average = total / count\n"
+            code "remainder = total % 2\n"
+          }
+          p "The arithmetic operators are +, -, *, /, and %. Parentheses make the order clear. Multiplication and division happen before addition and subtraction."
+          pre {
+            code "answer = 2 + 3 * 4\n"
+            code "sameAnswer = (2 + 3) * 4\n"
+          }
+          h3 "Compare and combine values"
+          p "Comparisons produce true or false. Use == and != to compare values, and <, >, <=, or >= to compare numbers. Use and, or, and not to combine or reverse conditions."
+          pre {
+            code "isAdult = age >= 18\n"
+            code "isGuest = name == \"Guest\"\n"
+            code "canEnter = hasTicket and isAdult\n"
+            code "isWeekend = day == \"Sat\" or day == \"Sun\"\n"
+            code "notFinished = not finished\n"
+          }
+        }
+
+        section(id: "conditions", class: "chapter") {
+          h2 "Conditions"
+          p "Use if to run code only when a condition is true. Use else for the other case and else if to check another condition."
+          pre {
+            code "if score >= 10 {\n"
+            code "  print(\"You passed\")\n"
+            code "} else if score >= 7 {\n"
+            code "  print(\"Almost there\")\n"
+            code "} else {\n"
+            code "  print(\"Try again\")\n"
+            code "}\n"
+          }
+          p "Conditions also work inside a view. Tattva creates the tags in the matching branch."
+          pre {
+            code "if isSignedIn {\n"
+            code "  p \"Welcome back\"\n"
+            code "} else {\n"
+            code "  p \"Please sign in\"\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "loops", class: "chapter") {
+          h2 "Loops"
+          p "Use for to visit each item in a list. The loop variable holds the current item."
+          pre {
+            code "colors = [\"blue\", \"green\", \"gold\"]\n"
+            code "for color in colors {\n"
+            code "  print(color)\n"
+            code "}\n"
+          }
+          h3 "Loop over a number range"
+          p "A numeric range uses two integer literals separated by two dots. Both endpoints are included, so this example prints 1, 2, 3, 4, and 5."
+          pre {
+            code "for number in 1..5 {\n"
+            code "  print(number)\n"
+            code "}\n"
+          }
+          h3 "Repeat while a condition is true"
+          p "A while loop checks its condition before each repetition. Change something inside the loop so the condition eventually becomes false."
+          pre {
+            code "count = 0\n"
+            code "while count < 3 {\n"
+            code "  print(count)\n"
+            code "  count = count + 1\n"
+            code "}\n"
+          }
+          p "Use break to exit a loop. Use continue to skip to the next repetition."
+          pre {
+            code "for number in [0, 1, 2, 3] {\n"
+            code "  if number == 0 {\n"
+            code "    continue\n"
+            code "  }\n"
+            code "  print(number)\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "collections", class: "chapter") {
+          h2 "Lists and maps"
+          h3 "Lists"
+          p "A list stores values in order. List indexes start at zero. Use length to read the number of items."
+          pre {
+            code "scores = [8, 10, 7]\n"
+            code "firstScore = scores[0]\n"
+            code "scoreCount = scores.length\n"
+            code "scores.push(9)\n"
+          }
+          p "Lists also support JavaScript methods such as map, filter, and includes."
+          pre {
+            code "doubled = scores.map(score -> score * 2)\n"
+            code "highScores = scores.filter(score -> score >= 9)\n"
+          }
+          h3 "Maps"
+          p "A map stores values under named keys. Use dot notation for a named key and square brackets for a key held in another value. Map literal keys are written as names."
+          pre {
+            code "person = { name: \"Ravi\", city: \"Pune\" }\n"
+            code "person.name\n"
+            code "field = \"city\"\n"
+            code "person[field]\n"
+          }
+          h3 "A list of maps"
+          pre {
+            code "books = [\n"
+            code "  { title: \"Dune\", year: 1965 },\n"
+            code "  { title: \"Kindred\", year: 1979 }\n"
+            code "]\n"
+            code "for book in books {\n"
+            code "  print(book.title)\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "functions", class: "chapter") {
+          h2 "Functions and lambdas"
+          p "A function gives a name to a task. Parameters are input values. Use return to send a result back to the caller."
+          pre {
+            code "fn addTax(price, rate) {\n"
+            code "  return price + price * rate\n"
+            code "}\n"
+            code "finalPrice = addTax(100, 0.18)\n"
+          }
+          p "A lambda is a function without a name. Lambdas are useful when a method needs a small function, such as map or filter."
+          pre {
+            code "double = number -> number * 2\n"
+            code "sum = (left, right) -> left + right\n"
+            code "doubledScores = scores.map(number -> number * 2)\n"
+          }
+          p "Functions can also handle browser events."
+          pre {
+            code "fn saveOrder() {\n"
+            code "  print(\"Order saved\")\n"
+            code "}\n"
+            code "button(onclick: saveOrder) \"Save order\"\n"
+          }
+        }
+
+        section(id: "pages", class: "chapter") {
+          h2 "Pages and views"
+          p "An app contains pages. Each page has a path and a view. The browser shows the page whose path matches the current URL."
+          pre {
+            code "app { title: \"My site\" }\n"
+            code "page \"/\" {\n"
+            code "  h1 \"Home\"\n"
+            code "}\n"
+            code "page \"/about\" {\n"
+            code "  h1 \"About\"\n"
+            code "}\n"
+          }
+          p "A view describes the visible page. Lowercase names such as section, h1, p, and button create HTML tags. Tags can have attributes, text, and child tags."
+          pre {
+            code "page \"/welcome\" {\n"
+            code "  section(class: \"welcome\") {\n"
+            code "    h1 \"Welcome to my page\"\n"
+            code "    p \"This is a Tattva view.\"\n"
+            code "    a(href: \"/about\") \"About us\"\n"
+            code "  }\n"
+            code "}\n"
+          }
+          p "Put a value in braces inside a text string to show it in the page."
+          pre { code "p \"Hello, {name}\"\n" }
+          p "Use if to choose which tags to show and for to repeat tags for each item in a list."
+          pre {
+            code "ul {\n"
+            code "  for item in items {\n"
+            code "    li \"{item}\"\n"
+            code "  }\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "elements", class: "chapter") {
+          h2 "Reusable elements"
+          p "An element is a named piece of an interface that you can use in more than one place. Start its name with a capital letter. Parameters let each use provide different values."
+          pre {
+            code "element Greeting(name) {\n"
+            code "  view {\n"
+            code "    p \"Hello, {name}\"\n"
+            code "  }\n"
+            code "}\n"
+          }
+          p "Use the element by writing its name and passing values with named arguments."
+          pre {
+            code "page \"/\" {\n"
+            code "  Greeting(name: \"Mira\")\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "state", class: "chapter") {
+          h2 "State and reactivity"
+          p "State is information that can change while a page is open. Examples include a counter, a selected tab, or text entered in a search field. A global can be shared by pages and views."
+          pre {
+            code "global clicks = 0\n"
+            code "derived doubleClicks = clicks * 2\n"
+            code "fn addClick() {\n"
+            code "  clicks = clicks + 1\n"
+            code "}\n"
+            code "button(onclick: addClick) \"Clicks: {clicks}\"\n"
+            code "p \"Double clicks: {doubleClicks}\"\n"
+          }
+          p "When a view displays a global value, changing that global refreshes its registered text, attributes, and conditional or repeated content. Persisted globals keep simple values in browser storage across reloads."
+        }
+
+        section(id: "events", class: "chapter") {
+          h2 "Events and forms"
+          p "An event happens when a visitor interacts with a page. Common event attributes include onclick and oninput. Set an event attribute to a function or a lambda."
+          pre {
+            code "fn greet() {\n"
+            code "  print(\"Hello!\")\n"
+            code "}\n"
+            code "button(onclick: greet) \"Say hello\"\n"
+            code "button(onclick: () -> print(\"Hi!\")) \"Another greeting\"\n"
+          }
+          p "Use bind with a simple variable name to keep an input value in a global."
+          pre {
+            code "global searchText = \"\"\n"
+            code "input(bind: searchText, placeholder: \"Search\")\n"
+            code "p \"Searching for: {searchText}\"\n"
+          }
+        }
+
+        section(id: "routes", class: "chapter") {
+          h2 "Routes and navigation"
+          p "A route is the path part of a page URL. Pages match exact paths. Set the app router to hash when you want navigation to use the part of the URL after the # symbol."
+          pre {
+            code "app {\n"
+            code "  title: \"My site\"\n"
+            code "  router: \"hash\"\n"
+            code "}\n"
+            code "page \"/about\" { h1 \"About\" }\n"
+            code "a(href: \"/about\") \"Read about us\"\n"
+          }
+        }
+
+        section(id: "models", class: "chapter") {
+          h2 "Models and records"
+          p "A model describes the fields shared by a kind of record. The compiler generates a small in-memory collection for each model. It is useful for organizing data and trying CRUD flows in a page. Records are held in browser memory for the current app session; this model system is not a database and does not save records after a reload."
+          pre {
+            code "model Note {\n"
+            code "  title: text\n"
+            code "  pinned: bool = false\n"
+            code "  summary: text?\n"
+            code "}\n"
+            code "fn createNote() {\n"
+            code "  Note.create({ title: \"Read this guide\" })\n"
+            code "  let allNotes = Note.all\n"
+            code "  let firstNote = Note.find(1)\n"
+            code "  let pinnedNotes = Note.where(note -> note.pinned)\n"
+            code "  let numberOfNotes = Note.count\n"
+            code "  Note.update(1, { pinned: true })\n"
+            code "  Note.delete(1)\n"
+            code "  Note.clear()\n"
+            code "}\n"
+          }
+          p "The collection API includes all, count, find, where, create, update, delete, and clear. Create returns a record. find looks up a record by its generated id. where filters records with a predicate. update changes fields on a record, and delete removes it. A record can also be changed by assigning one of its fields, or removed with its delete method. Field assignments notify render dependencies that use the model."
+          pre {
+            code "let note = Note.create({ title: \"Plan the week\" })\n"
+            code "note.pinned = true\n"
+            code "let matches = Note.where(item -> item.pinned)\n"
+          }
+          p "Fields can use defaults and optional markers. The compiler accepts field metadata such as required, unique, min, and max, but the current generated runtime does not enforce validation rules or persistence. Keep those limits in mind when deciding what data to trust."
+        }
+
+        section(id: "styles", class: "chapter") {
+          h2 "CSS and JavaScript"
+          p "Put ordinary CSS in a style block. Add a class attribute to a tag to match a CSS selector."
+          pre {
+            code "page \"/\" { p(class: \"notice\") \"Saved\" }\n"
+            code "style {\n"
+            code "  .notice { color: green; font-weight: bold; }\n"
+            code "}\n"
+          }
+          p "A script declaration loads an external JavaScript file. An extern declaration names a JavaScript value that is available to the app. A js block is copied into the generated JavaScript."
+          pre {
+            code "script \"https://example.test/library.js\"\n"
+            code "extern Library\n"
+            code "js {\n"
+            code "  window.appReady = true;\n"
+            code "}\n"
+          }
+        }
+
+        section(id: "debugging", class: "chapter") {
+          h2 "Debugging"
+          p "Start with the compiler message. It includes the source line where parsing stopped. Check braces, parentheses, quotation marks, and capitalization when a program does not compile."
+          p "If compilation succeeds but the page behaves differently than expected, inspect the generated index.html, style.css, and app.js. Reduce the program to a small example and compile again."
+          pre {
+            code "make build\n"
+            code "./parser hello hello/dist\n"
+          }
+        }
+      }
+    }
+  }
+
+  style {
+    :root {
+      color-scheme: light;
+      --ink: #202b24;
+      --muted: #5e6d62;
+      --line: #dfe7df;
+      --paper: #ffffff;
+      --green: #537d38;
+      --soft: #f4f7f1;
+      --code: #f4f6f3;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.7; }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .book-shell { min-height: 100vh; }
+    .topbar { display: none; }
+    .docs-header { position: sticky; top: 0; z-index: 50; min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 0 clamp(18px, 4vw, 64px); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); backdrop-filter: blur(12px); }
+    .docs-brand { display: inline-flex; align-items: center; gap: 10px; flex: 0 0 auto; color: var(--ink); font-size: 20px; font-weight: 750; }
+    .docs-brand img { width: 42px; height: 42px; object-fit: contain; }
+    .docs-nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 20px; min-width: 0; }
+    .docs-example-menu { position: relative; }
+    .docs-example-trigger { display: inline-flex; align-items: center; gap: 8px; padding: 10px 4px; color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; }
+    .docs-example-trigger::-webkit-details-marker { display: none; }
+    .docs-example-trigger::marker { content: ""; }
+    .docs-example-trigger::after { content: "⌄"; color: var(--muted); font-size: 16px; }
+    .docs-example-links { position: absolute; top: calc(100% + 10px); right: 0; z-index: 10; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; width: 330px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: white; box-shadow: 0 14px 35px rgba(26, 44, 31, .14); }
+    .docs-example-links a { padding: 9px 10px; border-radius: 7px; color: var(--ink); font-size: 13px; font-weight: 500; }
+    .docs-example-links a:hover { background: var(--soft); text-decoration: none; }
+    .docs-search { display: flex; align-items: center; gap: 8px; width: min(37vw, 390px); height: 42px; padding: 0 5px 0 12px; border: 1px solid #d7e0d6; border-radius: 10px; background: #f8faf7; }
+    .docs-search:focus-within { border-color: #7f9b69; box-shadow: 0 0 0 3px rgba(83,125,56,.12); }
+    .docs-search-icon { color: #71816f; font-size: 24px; line-height: 1; }
+    .docs-search input { width: 100%; min-width: 0; height: 100%; padding: 0; border: 0; outline: 0; color: var(--ink); background: transparent; font-family: inherit; font-size: 14px; line-height: 1.4; }
+    .docs-search input::placeholder { color: #849084; }
+    .docs-search button { flex: 0 0 auto; padding: 8px 12px; border: 0; border-radius: 7px; color: white; background: var(--green); font-family: inherit; font-size: 12px; font-weight: 600; line-height: 1; cursor: pointer; }
+    .docs-search button:hover { background: #42652e; }
+    .docs-frame { max-width: 1120px; margin: auto; padding: 28px 32px 60px; }
+    .docs-main { min-width: 0; }
+    .brand { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); font-size: 20px; font-weight: 800; }
+    .brand-logo { width: 42px; height: 42px; object-fit: contain; }
+    .book-grid { max-width: 920px; margin: 0 auto; padding: 34px 32px 70px; }
+    .book-content { min-width: 0; }
+    .cover { padding: 28px 0 40px; border-bottom: 1px solid var(--line); }
+    .cover-logo { display: block; width: 112px; height: 112px; object-fit: contain; margin-bottom: 24px; }
+    .book-content .cover h1 { max-width: 760px; margin: 0 0 12px; color: var(--ink); font-size: clamp(40px, 6vw, 60px); font-weight: 760; line-height: 1.08; letter-spacing: -.04em; }
+    .book-content h2 { margin: 0 0 14px; color: var(--ink); font-size: 30px; font-weight: 680; line-height: 1.2; letter-spacing: -.025em; }
+    .book-content h3 { margin: 25px 0 8px; color: var(--ink); font-size: 19px; font-weight: 650; line-height: 1.35; }
+    .docs-main > main h1 { font-weight: 650 !important; letter-spacing: -.025em; }
+    .docs-main > main h2 { font-weight: 620 !important; }
+    .docs-main > main h3 { font-weight: 600 !important; }
+    .docs-main > main .font-black, .docs-main > main .font-extrabold { font-weight: 650 !important; }
+    .docs-main > main .font-bold { font-weight: 550 !important; }
+    .docs-main .navbar-cta { color: #fff !important; }
+    p { margin: 0 0 15px; }
+    .lead { max-width: 740px; margin-bottom: 30px; color: var(--muted); font-size: 18px; }
+    .contents-page { padding: 34px 0; border-bottom: 1px solid var(--line); }
+    .contents-list { columns: 2; column-gap: 35px; margin: 18px 0 0; padding: 0; list-style: none; }
+    .contents-list li { break-inside: avoid; padding: 5px 0; color: var(--muted); }
+    .chapter { padding: 38px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 76px; }
+    .chapter p, .chapter li { color: #4e5c54; }
+    .chapter ul, .chapter ol { margin: 10px 0 19px; padding-left: 22px; }
+    pre { display: block; margin: 12px 0 18px; padding: 14px 17px; overflow: auto; border: 1px solid #e2e9e2; border-radius: 9px; color: #263d2d; background: var(--code); font: 12px/1.7 "SFMono-Regular", Consolas, "Liberation Mono", monospace; white-space: pre-wrap; }
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .type-table { margin: 18px 0 24px; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: white; }
+    .type-row { display: grid; grid-template-columns: 120px 190px 1fr; gap: 12px; align-items: center; min-height: 43px; padding: 8px 13px; border-bottom: 1px solid var(--line); font-size: 12px; }
+    .type-row:last-child { border: 0; }
+    .type-row code { color: #315c3b; font-size: 11px; }
+    .type-row span { color: var(--muted); }
+    .type-head { color: #586761; background: var(--soft); }
+    .type-head strong { font-size: 11px; }
+    .example-source-panel { width: 100%; min-width: 0; max-width: 1000px; margin: 28px auto 0; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .example-source-panel h2 { font-size: 21px; }
+    .example-source-panel pre { max-width: 100%; max-height: 65vh; overscroll-behavior-x: contain; }
+    @media (max-width: 620px) {
+      .docs-header { position: sticky; min-height: 0; flex-wrap: wrap; gap: 6px 14px; padding: 9px 14px; }
+      .docs-brand { font-size: 18px; }
+      .docs-brand img { width: 36px; height: 36px; }
+      .docs-nav-actions { flex: 1 1 100%; justify-content: space-between; gap: 10px; }
+      .docs-example-links { position: fixed; top: 104px; right: 14px; width: min(330px, calc(100vw - 28px)); }
+      .docs-search { flex: 1 1 auto; width: auto; height: 40px; }
+      .docs-search button { padding: 8px 10px; }
+      .docs-frame { padding: 12px 16px 42px; }
+      .example-source-panel { padding: 16px; }
+      .book-grid { padding: 18px 18px 45px; }
+      .contents-list { columns: 1; }
+      .type-row { grid-template-columns: 80px 130px 1fr; gap: 7px; padding: 8px; font-size: 10px; }
+      .book-content h2 { font-size: 26px; }
+      .book-content .cover h1 { font-size: clamp(36px, 10vw, 48px); }
+    }
+  }
+}
+
+js {
+  function loadDocumentationExampleSource() {
+    const match = window.location.hash.match(/^#\/examples\/([a-z-]+)$/);
+    if (!match) return;
+    const target = document.getElementById("source-" + match[1]);
+    if (!target) return;
+    fetch("sources/" + match[1] + ".tattva")
+      .then((response) => response.text())
+      .then((source) => { target.textContent = source; });
+  }
+  window.addEventListener("DOMContentLoaded", () => setTimeout(loadDocumentationExampleSource, 0));
+  window.addEventListener("hashchange", () => setTimeout(loadDocumentationExampleSource, 0));
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    const target = document.getElementById(link.getAttribute("href").slice(1));
+    if (!target) return;
+    event.preventDefault();
+    target.scrollIntoView({ behavior: "smooth" });
+  });
+}

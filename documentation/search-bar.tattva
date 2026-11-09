@@ -1,0 +1,36 @@
+global searchText = ""
+global snippets = [
+  { title: "Variables and values", category: "Basics", icon: "⌘" },
+  { title: "Loops that repeat", category: "Control flow", icon: "↻" },
+  { title: "Build a reusable element", category: "Components", icon: "◈" },
+  { title: "Style a Tattva view", category: "Design", icon: "✳" },
+  { title: "Share state with globals", category: "State", icon: "◎" }
+]
+
+page "/examples/search-bar" {
+  main(class: "min-h-screen bg-slate-950 px-5 py-20 text-white") {
+    section(class: "mx-auto max-w-3xl") {
+      h1(class: "mt-4 text-4xl font-semibold tracking-tight sm:text-6xl") "Find the next thing to learn."
+      label(class: "mt-9 flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900 px-5 py-4 shadow-2xl focus-within:border-green-300") {
+        span(class: "text-2xl text-green-300") "⌕"
+        input(class: "w-full bg-transparent text-lg text-white outline-none placeholder:text-slate-500", bind: searchText, placeholder: "Try components or state")
+      }
+      div(class: "mt-10 space-y-3") {
+        for result in snippets.filter(item -> item.title.toLowerCase().includes(searchText.toLowerCase()) or item.category.toLowerCase().includes(searchText.toLowerCase())) {
+          article(class: "flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-5 transition hover:border-green-400") {
+            span(class: "grid h-12 w-12 place-items-center rounded-xl bg-green-300/10 text-2xl text-green-200") "{result.icon}"
+            div(class: "flex-1") {
+              h2(class: "font-medium") "{result.title}"
+              p(class: "mt-1 text-sm text-slate-400") "{result.category}"
+            }
+            span(class: "text-slate-500") "↗"
+          }
+        }
+      }
+    }
+    section(class: "example-source-panel") {
+      h2 "Tattva source"
+      pre { code(id: "source-search-bar") "Loading source..." }
+    }
+  }
+}

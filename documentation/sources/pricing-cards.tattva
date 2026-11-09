@@ -1,0 +1,37 @@
+app {
+  title: "Pricing Plans"
+}
+
+script "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+
+element PricePlan(name, price, description, action) {
+  view {
+    article(class: "flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-7 shadow-lg") {
+      span(class: "text-sm font-semibold uppercase tracking-widest text-green-700") "{name}"
+      p(class: "mt-4 text-5xl font-semibold tracking-tight text-slate-900") "{price}"
+      p(class: "mt-3 min-h-12 leading-6 text-slate-600") "{description}"
+      ul(class: "my-7 space-y-3 text-sm text-slate-700") {
+        li "✓ One project"
+        li "✓ Friendly documentation"
+        li "✓ Community support"
+      }
+      button(class: "mt-auto rounded-xl bg-green-800 px-5 py-3 font-medium text-white transition hover:bg-green-700") "{action}"
+    }
+  }
+}
+
+page "/" {
+  main(class: "min-h-screen bg-slate-50 px-5 py-16") {
+    section(class: "mx-auto max-w-6xl") {
+      div(class: "mx-auto max-w-2xl text-center") {
+        h1(class: "mt-4 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl") "Simple plans. Clear choices."
+        p(class: "mt-4 text-lg text-slate-600") "A reusable plan card keeps the layout consistent while each card receives its own values."
+      }
+      div(class: "mt-12 grid gap-5 md:grid-cols-3") {
+        PricePlan(name: "Starter", price: "$0", description: "For the first idea and the first deploy.", action: "Start free")
+        PricePlan(name: "Maker", price: "$12", description: "For the side project that is getting serious.", action: "Choose Maker")
+        PricePlan(name: "Studio", price: "$29", description: "For a small team shipping together.", action: "Choose Studio")
+      }
+    }
+  }
+}

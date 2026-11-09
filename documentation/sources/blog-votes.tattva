@@ -1,0 +1,50 @@
+app {
+  title: "Blog with votes"
+}
+
+script "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+
+global votes = 128
+
+fn upvote() {
+  votes = votes + 1
+}
+
+fn downvote() {
+  if votes > 0 {
+    votes = votes - 1
+  }
+}
+
+page "/" {
+  main(class: "min-h-screen bg-[#f8f6f1] px-5 py-16 text-slate-800") {
+    article(class: "mx-auto max-w-3xl rounded-3xl bg-white p-7 shadow-xl sm:p-12") {
+      div(class: "flex items-center justify-between gap-4") {
+        span(class: "text-sm text-slate-500") "6 min read"
+      }
+      h1(class: "mt-8 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl") "Small tools can make the web feel bigger."
+      p(class: "mt-5 text-lg leading-8 text-slate-600") "A tiny reflection on building things one useful piece at a time."
+      div(class: "mt-8 flex items-center gap-3 border-y border-slate-100 py-5") {
+        span(class: "grid h-11 w-11 place-items-center rounded-full bg-green-100 font-semibold text-green-700") "AK"
+        div {
+          strong(class: "block text-sm") "A Tattva maker"
+          span(class: "text-xs text-slate-500") "Today · Community notes"
+        }
+      }
+      div(class: "mt-8 space-y-5 text-base leading-8 text-slate-700") {
+        p "A useful interface is often a collection of small decisions that fit together. A button needs a clear label. A list needs a helpful empty state. A page needs one good next step."
+        p "This example keeps the article simple and adds one interactive detail: readers can vote, and the shared count updates on the page."
+      }
+      div(class: "mt-10 flex items-center justify-between rounded-2xl bg-slate-50 p-4") {
+        div {
+          strong(class: "text-2xl") "{votes}"
+          p(class: "text-xs text-slate-500") "readers found this useful"
+        }
+        div(class: "flex gap-2") {
+          button(class: "rounded-xl border border-slate-200 bg-white px-4 py-3 font-medium transition hover:border-emerald-400 hover:text-emerald-700", onclick: upvote) "↑ Helpful"
+          button(class: "rounded-xl border border-slate-200 bg-white px-4 py-3 font-medium transition hover:border-green-400 hover:text-green-700", onclick: downvote) "↓"
+        }
+      }
+    }
+  }
+}

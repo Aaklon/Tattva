@@ -1,0 +1,65 @@
+global openQuestion = ""
+
+fn toggleQuestion(question) {
+  if openQuestion == question {
+    openQuestion = ""
+  } else {
+    openQuestion = question
+  }
+}
+
+page "/examples/faq" {
+  main(class: "min-h-screen bg-green-50 px-5 py-16") {
+    section(class: "mx-auto max-w-3xl") {
+      div(class: "text-center") {
+        h1(class: "mt-4 text-4xl font-semibold tracking-tight text-slate-900") "A few useful answers."
+        p(class: "mt-4 text-slate-600") "Open a question to reveal its answer. Click it again to close it."
+      }
+      div(class: "mt-10 space-y-3") {
+        article(class: "rounded-2xl bg-white p-5 shadow-sm") {
+          button(class: "flex w-full items-center justify-between gap-4 text-left font-medium text-slate-900", onclick: () -> toggleQuestion("start")) {
+            span "How do I start with Tattva?"
+            if openQuestion == "start" {
+              span(class: "text-xl text-green-700") "−"
+            } else {
+              span(class: "text-xl text-green-700") "+"
+            }
+          }
+          if openQuestion == "start" {
+            p(class: "mt-4 border-t border-slate-100 pt-4 leading-7 text-slate-600") "Build the parser, make a small .tattva file, and compile it into a folder. The beginner book walks through each step."
+          }
+        }
+        article(class: "rounded-2xl bg-white p-5 shadow-sm") {
+          button(class: "flex w-full items-center justify-between gap-4 text-left font-medium text-slate-900", onclick: () -> toggleQuestion("state")) {
+            span "Where should shared state live?"
+            if openQuestion == "state" {
+              span(class: "text-xl text-green-700") "−"
+            } else {
+              span(class: "text-xl text-green-700") "+"
+            }
+          }
+          if openQuestion == "state" {
+            p(class: "mt-4 border-t border-slate-100 pt-4 leading-7 text-slate-600") "Use a global when multiple pages or elements need the same value. Keep one-owner values local where possible."
+          }
+        }
+        article(class: "rounded-2xl bg-white p-5 shadow-sm") {
+          button(class: "flex w-full items-center justify-between gap-4 text-left font-medium text-slate-900", onclick: () -> toggleQuestion("ready")) {
+              span "Can I customize these examples?"
+            if openQuestion == "ready" {
+              span(class: "text-xl text-green-700") "−"
+            } else {
+              span(class: "text-xl text-green-700") "+"
+            }
+          }
+          if openQuestion == "ready" {
+            p(class: "mt-4 border-t border-slate-100 pt-4 leading-7 text-slate-600") "Yes. Change the text, colors, and data to fit the page you want to build."
+          }
+        }
+      }
+    }
+    section(class: "example-source-panel") {
+      h2 "Tattva source"
+      pre { code(id: "source-faq") "Loading source..." }
+    }
+  }
+}
